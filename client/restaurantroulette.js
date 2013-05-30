@@ -14,8 +14,25 @@ if (Meteor.isClient) {
   });
 
   Template.restaurantList.restaurants = function () {
-    console.log('reevaluate restaurant list')
     return Session.get('restaurants');
+  };
+
+  Template.restaurantList.rendered = function () {
+    var restaurants = Session.get('restaurants');
+
+    if (restaurants === undefined) {
+      return
+    }
+
+    restaurants.forEach(function (restaurant) {
+      var restaurantId = '#' + getRestaurantId(restaurant);
+      var bc = restaurant.imageInfo.colors[0].color;
+      var tc = restaurant.imageInfo.colors[restaurant.imageInfo.colors.length - 1].color;
+      $(restaurantId + ' .restaurant-tab').css('background-color',
+        'rgb(' + bc[0] + ', ' + bc[1] + ', ' + bc[2] + ')');
+      $(restaurantId + ' .restaurant-tab').css('color',
+        'rgb(' + tc[0] + ', ' + tc[1] + ', ' + tc[2] + ')');
+    });
   };
 
   Template.restaurantList.keywords = function (info) {
@@ -29,11 +46,6 @@ if (Meteor.isClient) {
   Template.newRestaurant.events({
     'submit': function (e) {
       e.preventDefault()
-      console.log('submitted')
-      return false;
-    },
-    'click': function (e) {
-      e.preventDefault()
       form = $('#nr-name');
       form.attr('disabled', 'disabled')
       
@@ -45,8 +57,6 @@ if (Meteor.isClient) {
       }
 
       Meteor.call('addRestaurant', '02114', name, function (err, result) {
-        console.log('addrestaurant returned', err, result)
-
         if (result['success']) {
           var restaurants = Session.get('restaurants');
           if (restaurants === undefined) {
@@ -54,7 +64,6 @@ if (Meteor.isClient) {
           } else {
             restaurants.push(result['info'])
             Session.set('restaurants', restaurants);
-            console.log('restaurants', restaurants);
           }
         }
 
@@ -101,18 +110,8 @@ if (Meteor.isClient) {
         $('#shuffle').removeAttr('disabled');
       });
 
-      var restaurants = Session.get('restaurants');
-      restaurants.forEach(function (restaurant) {
-        var restaurantId = '#' + getRestaurantId(restaurant);
-        var bc = restaurant.imageInfo.colors[0].color;
-        var tc = restaurant.imageInfo.colors[restaurant.imageInfo.colors.length - 1].color;
-        $(restaurantId + ' .restaurant-tab').css('background-color',
-          'rgb(' + bc[0] + ', ' + bc[1] + ', ' + bc[2] + ')');
-        $(restaurantId + ' .restaurant-tab').css('color',
-          'rgb(' + tc[0] + ', ' + tc[1] + ', ' + tc[2] + ')');
-      });
-
       var choice = $(slots[0]).attr('id');
+      var restaurants = Session.get('restaurants');
       restaurants.forEach(function (restaurant) {
         if (restaurant._id === choice) {
           Session.set('currentRestaurant', restaurant);

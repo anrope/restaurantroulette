@@ -55,7 +55,6 @@ if (Meteor.isServer) {
   }
   
   function fetchRestaurantByLocationSync(loc, term) {
-    console.log('fetching restaurant', loc, term)
     var ywsid = Meteor.settings.yelpYwsid;
     var yelpBase = "http://api.yelp.com/business_review_search";
     var result = Meteor.http.get(yelpBase, {
@@ -70,7 +69,6 @@ if (Meteor.isServer) {
     });
 
     var yelpInfo = EJSON.parse(result.content);
-    console.log('yelpinfo', yelpInfo)
 
     if (yelpInfo.businesses.length === 0) {
       return {
@@ -134,19 +132,7 @@ if (Meteor.isServer) {
 
   Meteor.methods({
     addRestaurant: function (loc, name) {
-      /*
-      fetchRestaurantByLocation(loc, name, function (info) {
-        return {
-          'success': true,
-          'info': info
-        }
-      });
-      */
-
-      var info = fetchRestaurantByLocationSync(loc, name);
-      console.log('info',  info)
-
-      return info
+      return fetchRestaurantByLocationSync(loc, name);
     }
   });
 
