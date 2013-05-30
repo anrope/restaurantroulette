@@ -1,0 +1,44 @@
+/* CSS declarations go here */
+@red: #ff4e0e;
+@gray: #aaa;
+
+.text-center {
+  text-align: center;
+}
+
+.top-nav {
+  .site-title {
+    color: @gray;
+  }
+  .restaurant-title {
+    color: @red;
+  }
+}
+
+#restaurant-list {
+  margin-top: 3em;
+
+  .restaurant-slot {
+    margin-bottom: 20px;
+
+    .restaurant-info {
+      display: none;
+      padding: 10px;
+      border: 1px dashed @gray;
+      border-top: none;
+      border-right: none;
+    }
+    .restaurant-image {
+      img {
+        width: 100px;
+        height: 100px;
+        padding-left: 10px;
+      }
+    }
+    .restaurant-name {
+      font-size: 20px;
+      padding-top: 40px;
+      padding-left: 5px;
+    }
+  }
+}

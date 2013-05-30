@@ -1,0 +1,73 @@
+<head>
+  <title>Boston Restaurant Roulette</title>
+</head>
+
+<body>
+  <div class="row">
+    <div class="small-3 columns">
+      {{> titleBar}}
+      {{> controls}}
+    </div>
+    <div class="small-9 columns" id="restaurant-list">
+      {{> restaurantList}}
+    </div>
+  </div>
+</body>
+
+<template name="titleBar">
+  <h1 class="text-center">Boston Restaurant Roulette</h1>
+</template>
+
+<template name="restaurantList">
+  {{#each restaurants}}
+    <div class="restaurant-slot" id="{{restaurantId this}}">
+      <div class="restaurant-tab">
+        <div class="row">
+          <div class="small-3 columns restaurant-image">
+            <img src="{{restaurantThumbnail this}}" />
+          </div>
+          <div class="small-9 columns restaurant-name">
+            {{name}}
+          </div>
+        </div>
+      </div>
+      <div class="restaurant-info">
+        <div class="row">
+          <div class="small-4 columns">
+            <ul class="small-block-grid-2">
+              {{#each keywords this}}
+                <li class="text-center">{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
+          <div class="small-8 columns">
+            <img src="{{restaurantImage this}}" />
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</template>
+
+<template name="controls">
+  <ul class="side-nav">
+    <li>
+      <div>
+        {{> newRestaurant}}
+      </div>
+    </li>
+    <li>{{> shuffle}}</li>
+  </ul>
+</template>
+
+<template name="newRestaurant">
+  <form>
+    <input id="nr-name" type="text" placeholder="restaurant name" />
+  </form>
+</template>
+
+<template name="shuffle">
+  <div>
+    <button id="shuffle">Make decisions for me!</button>
+  </div>
+</template>
