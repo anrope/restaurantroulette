@@ -123,9 +123,7 @@ if (Meteor.isServer) {
     });
     info.imageInfo = result.data.images[0];
 
-    var restaurant_id = Meteor.call('createRestaurant', info);
-
-    info['_id'] = restaurant_id;
+    info._id = Meteor.call('createRestaurant', info);
 
     return info
   }

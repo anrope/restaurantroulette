@@ -131,49 +131,39 @@ if (Meteor.isClient) {
     return componentToHex(r) + componentToHex(g) + componentToHex(b);
   }
 
-  function getEmbedlyImage(info, width, height, fillBackground) {
-    var displayBase;
-    if (fillBackground) {
-      displayBase = 'http://i.embed.ly/1/display/fill';
-    } else {
-      displayBase = 'http://i.embed.ly/1/display/resize';
-    }
-
+  function getThumbnail(info) {
+    var displayBase = 'http://i.embed.ly/1/display/fill';
     var embedlyImageKey = Meteor.settings.public.embedlyImageKey;
+    
+    var dc;
+    if (typeof info.imageInfo.colors !== 'undefined') {
+      dc = info.imageInfo.colors[0].color;
+    } else {
+      dc = [255, 255, 255];
+    }
 
     var params = {
       key: embedlyImageKey,
-      url: info.imageInfo.url
-    }
-
-    if (width != -1) {
-      params['width'] = width;
-    }
-
-    if (height != -1) {
-      params['height'] = height;
-    }
-   
-    if (fillBackground) {
-      var dc;
-      if (typeof info.imageInfo.colors !== 'undefined') {
-        dc = info.imageInfo.colors[0].color;
-      } else {
-        dc = [255, 255, 255];
-      }
-
-      params['color'] = rgbToHex(dc[0], dc[1], dc[2]);
+      url: info.imageInfo.url,
+      width: 100,
+      height: 100,
+      color: rgbToHex(dc[0], dc[1], dc[2])
     }
 
     return displayBase + '?' + $.param(params)
   }
-  
-  function getThumbnail(info) {
-    return getEmbedlyImage(info, 100, 100, true);
-  }
 
   function getImage(info) {
-    return getEmbedlyImage(info, 400, -1, false);
+    var displayBase = 'http://i.embed.ly/1/display/resize';
+    var embedlyImageKey = Meteor.settings.public.embedlyImageKey;
+
+    var params = {
+      key: embedlyImageKey,
+      url: info.imageInfo.url,
+      width: 400
+    }
+
+    return displayBase + '?' + $.param(params)
   }
   
   function getRestaurantId(info) {
